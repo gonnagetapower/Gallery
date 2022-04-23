@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import ImageList from '@mui/material/ImageList';
+import ImageListItem from "@mui/material/ImageListItem";
 
 import "./Gallery.css"
 
@@ -26,16 +28,16 @@ const Collections = () => {
         getPhoto();
     }, [])
     return (
-        <div className="Gallery">
+        <ImageList variant="masonry" cols={4} gap={8}>
             {console.log(photo)}
-            <h1>Collection</h1>
+            <div><h1>Gallery</h1></div>
             {/* // <img src={photo}></img> */}
             {photo.map((pic) => {
                 return (
                         <img src={pic.urls.small} />
                 )
             })}
-        </div>
+            </ImageList>   
     )
 }
 
