@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import ImageList from '@mui/material/ImageList';
-import ImageListItem from "@mui/material/ImageListItem";
 
 import "./Gallery.css"
+import { Masonry } from "@mui/lab";
 
 const collection = axios.create({
     baseURL: "https://api.unsplash.com/photos",
@@ -17,27 +16,25 @@ const collection = axios.create({
 
 })
 
+
 const Collections = () => {
     const [photo, setPhoto] = useState([])
     useEffect(() => {
         async function getPhoto() {
             const response = await collection.get("/");
             setPhoto(response.data)
-            console.log(response)
         }
         getPhoto();
+        console.log(photo)
     }, [])
     return (
-        <ImageList variant="masonry" cols={4} gap={8}>
-            {console.log(photo)}
-            <div><h1>Gallery</h1></div>
-            {/* // <img src={photo}></img> */}
-            {photo.map((pic) => {
-                return (
-                        <img src={pic.urls.small} />
-                )
-            })}
-            </ImageList>   
+                <Masonry columns={{ xs: 1, sm: 2, md: 3, lg: 4, xl: 5 }} spacing={2}>
+                {photo.map((index) => (
+  
+                    <img src={index.urls.small} />
+ 
+                ))}
+              </Masonry>
     )
 }
 
