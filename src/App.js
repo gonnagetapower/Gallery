@@ -1,10 +1,12 @@
 import React from "react";
 import Collections from "./Pages/Gallery/Gallery";
+import Header from "./Components/Header/Header";
+import "./App.css"
 
 const App = () => {
     return (
       <div>
-        <h1>Galery app</h1>
+        <Header />
         <Collections />
       </div>
     );

@@ -4,8 +4,6 @@ import { Masonry } from "@mui/lab";
 import InfiniteScroll from "react-infinite-scroll-component";
 
 import "./Gallery.css"
-import { containerClasses } from "@mui/material";
-
 
 const collection = axios.create({
     baseURL: "https://api.unsplash.com/photos",
@@ -20,24 +18,24 @@ const collection = axios.create({
 })
 
 
-
 const Collections = () => {
     const [photo, setPhoto] = useState([])
     const [page, updatePage] = useState(1)
+    const [error, setError] = useState(null)
     useEffect(() => {
-        async function getPhoto() {
-            const response = await collection.get("/");
-            setPhoto(response.data)
-        }
-        getPhoto();
+        collection.get(`/?page=${page}`).
+            then((response) => {
+                setPhoto(response.data)
+            }).catch(error => {
+                setError(error)
+            })
     }, [])
     async function fetchMorePhoto() {
-        const response = await collection.get(`/?page=${page}`);
+        const response = await collection.get(`/?page=${page + 1}`)
         updatePage(page + 1)
         setPhoto(photo.concat(response.data))
-        console.log('success')
     }
-    
+    if (error) return `Error: ${error.message}`
     return (
         <InfiniteScroll
             dataLength={photo.length}
@@ -45,10 +43,10 @@ const Collections = () => {
             hasMore={true}
             loader={<h4>Loading...</h4>}
         >
-            <Masonry columns={{ xs: 1, sm: 2, md: 3, lg: 4, xl: 5 }} spacing={2}>
+            <Masonry columns={{ xs: 1, sm: 2, md: 3, lg: 4, xl: 5 }} spacing={1}>
                 {photo.map((index) => (
 
-                    <img src={index.urls.small} />
+                        <img src={index.urls.small} />
 
                 ))}
             </Masonry>
