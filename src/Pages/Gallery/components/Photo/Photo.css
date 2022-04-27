@@ -1,0 +1,11 @@
+.item__photo:hover {
+    transition: 0.5s;
+    opacity: 0.3;
+    cursor: pointer;
+}
+
+@media screen and (max-width: 600px) {
+    .item__photo:hover {
+        opacity: 1;
+    }
+}

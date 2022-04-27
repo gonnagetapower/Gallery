@@ -1,42 +1,67 @@
-.modal {
-    height: 100vh;
-    width: 100vw;
-    background-color: rgba(0, 0, 0, 0.4);
-    position: fixed;
-    top: 0;
-    left: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    opacity: 0;
-    pointer-events: none;
-    transition: 0.3s;
-}
-
-.modal.active {
-    opacity: 1;
-    pointer-events: all;
-}
-
-.modal__content {
-    padding: 20px;
-    border-radius: 12px;
-    background-color: white;
-    transform: scale(0.5);
-}
-
-.modal__content.active {
-    transform: scale(1);
-}
-
-.modal__deactivate {
-    cursor: pointer;
-    position: absolute;
-    top: 10px;
-    left: 10px;
-}
-
-.modal__content * {
-    height: 70%;
-    width: 50%;
-}
+    .modal {
+        height: 100vh;
+        width: 100vw;
+        background-color: rgba(0, 0, 0, 0.4);
+        position: fixed;
+        top: 0;
+        left: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        opacity: 0;
+        pointer-events: none;
+        transition: 0.3s;
+    }
+    
+    .modal.active {
+        opacity: 1;
+        pointer-events: all;
+    }
+    
+    .modal__content {
+        padding: 20px;
+        border-radius: 12px;
+        background-color: white;
+        transform: scale(0.5);
+    }
+    
+    .modal__content.active {
+        transform: scale(1);
+    }
+    /* крестик */
+    
+    .modal__deactivate {
+        cursor: pointer;
+        position: sticky;
+        float: right;
+        margin-right: 25px;
+    }
+    
+    .modal__deactivate:before,
+    .modal__deactivate:after {
+        content: "";
+        position: absolute;
+        width: 48px;
+        height: 8px;
+        background: rgb(212, 162, 162);
+    }
+    
+    .modal__deactivate:before {
+        transform: rotate(45deg);
+    }
+    
+    .modal__deactivate:after {
+        transform: rotate(-45deg);
+    }
+    
+    .modal__item>img {
+        max-height: 600px;
+        max-width: 1200px;
+    }
+    
+    @media screen and (max-width: 600px) {
+        .modal__item>img {
+            max-height: 400px;
+            max-width: 400px;
+        }
+    }

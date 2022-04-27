@@ -1,10 +1,11 @@
 import React from 'react';
 
+import './Photo.css'
+
 const Photo = (props) => {
-    console.log(props)
     return (
         <>
-            <img onClick={() => {
+            <img class="item__photo" onClick={() => {
                 props.setModalActive(true)
                 props.setModalData(props.data.urls.regular)
                 }} src={props.photoUrl} />

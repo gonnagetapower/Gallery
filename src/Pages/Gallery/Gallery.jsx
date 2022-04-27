@@ -3,7 +3,7 @@ import axios from "axios";
 import { Masonry } from "@mui/lab";
 import InfiniteScroll from "react-infinite-scroll-component";
 
-import Photo from './components/Photo/Photo.jsx'
+import Photo from './components/Photo/Photo'
 
 import "./Gallery.css"
 import Modal from "../../Components/Modal/Modal.jsx";
@@ -23,28 +23,32 @@ const collection = axios.create({
 
 const Collections = () => {
     const [modalActive, setModalActive] = useState(false)
-    const [modalData, setModalData] = useState(null);
     const [photo, setPhoto] = useState([])
     const [page, updatePage] = useState(1)
+    const [modalData, setModalData] = useState({});
     const [error, setError] = useState(null)
     useEffect(() => {
-        collection.get(`/?page=${page}&page=${page + 1}`).
+        collection.get(`/?page=${page}
+        &page=${page + 1}
+        &page=${page + 2}
+        &page=${page + 3}
+        &page=${page + 4}`).
             then((response) => {
                 setPhoto(response.data)
-                updatePage(page + 2)
+                updatePage(page + 4)
                 console.log(response.data)
             }).catch(error => {
                 setError(error)
             })
     }, [])
     async function fetchMorePhoto() {
-        const response = await collection.get(`/?page=${page + 1}`)
+        const response = await collection.get(`/?page=${page + 5}`)
         updatePage(page + 1)
         setPhoto(photo.concat(response.data))
     }
     if (error) return `Error: ${error.message}`
     return (
-        <div>
+        <div class="app__wrapper">
             <InfiniteScroll
                 dataLength={photo.length}
                 next={fetchMorePhoto}
@@ -62,7 +66,7 @@ const Collections = () => {
                 </Masonry>
             </InfiniteScroll>
             <Modal active={modalActive} setActive={setModalActive} >
-                <img src={modalData}/>
+            <img src={modalData}/>
             </Modal>
         </div>
     )
