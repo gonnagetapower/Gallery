@@ -34,6 +34,8 @@ const Collections = () => {
     const [searchInput, setSearchInput] = useState('')
     const [searchPhoto, setSearchPhoto] = useState([])
 
+    const debouncedSearchTerm = useDebounce(searchInput, 500);
+
     const [loading, setLoading] = useState(false)
 
     const [error, setError] = useState(null)
@@ -46,7 +48,6 @@ const Collections = () => {
     function initialFetch() {
         collection.get(`/photos?page=${page}`).
             then((response) => {
-                console.log(`initialFetching: ${response.data}`)
                 setPhoto([...photo, ...response.data])
                 setPage(page + 1)
             }).catch(error => {
@@ -54,24 +55,26 @@ const Collections = () => {
             })
     }
 
-    const searchFetch = useDebounce(async (searchInput) => {
-        collection.get(`/search/photos?page=${page}&query=${searchInput}`)
+    const searchFetch = (query) => {
+        collection.get(`/search/photos?page=${page}&query=${query}`)
             .then((response) => {
-                console.log(`searchFetching: ${response.data.results}`)
+                setSearchPhoto(null)
                 setSearchPhoto(searchPhoto.concat(response.data.results))
                 setPage(page + 1)
             }).catch(error => {
                 setError(error)
             })
-    }, 5)
+    }
 
 
     useEffect(() => {
         initialFetch()
     }, [])
     useEffect(() => {
-        searchFetch()
-    }, [searchInput])
+      if (debouncedSearchTerm) {
+        searchFetch(debouncedSearchTerm)
+      }
+    }, [debouncedSearchTerm])
 
     if (error) return `Error: ${error.message}`
     return (

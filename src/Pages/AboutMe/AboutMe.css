@@ -1,6 +1,25 @@
 .aboutMe-wrapper {
-    width: 80%;
-    height: 80%;
-    margin: 0 auto;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
     text-align: center;
+    align-content: center;
+}
+
+ul {
+    padding: 0;
+}
+
+.aboutMe-wrapper__links>ul>img {
+    margin: 0;
+    width: 70px;
+    height: 70px;
+    object-fit: cover;
+    padding: 5px;
+    cursor: pointer;
+}
+
+.aboutMe-wrapper__links>ul>img:hover {
+    width: 80px;
+    height: 80px;
 }
