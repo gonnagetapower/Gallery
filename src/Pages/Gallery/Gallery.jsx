@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState , useCallback } from "react";
 import axios from "axios";
 import { Masonry } from "@mui/lab";
 import InfiniteScroll from "react-infinite-scroll-component";
@@ -9,6 +9,7 @@ import "./Gallery.css"
 import Modal from "../../Components/Modal/Modal.jsx";
 import Search from "./components/Search/Search";
 import Loader from "../../Components/Loader/Loader";
+import useDebounce from "../../hooks/useDebounce";
 
 const collection = axios.create({
     baseURL: "https://api.unsplash.com/",
@@ -37,41 +38,49 @@ const Collections = () => {
 
     const [error, setError] = useState(null)
 
+    const changeHanlder = useCallback(async (e) => {
+        setSearchInput(e.target.value)
+    }, [])
+
+
     function initialFetch() {
         collection.get(`/photos?page=${page}`).
             then((response) => {
+                console.log(`initialFetching: ${response.data}`)
                 setPhoto([...photo, ...response.data])
                 setPage(page + 1)
-                console.log(response.data)
             }).catch(error => {
                 setError(error)
             })
     }
 
-    const searchFetch = async () => {
-        try {
-            const response = await collection.get(`/search/photos?page=${page}&query=${searchInput}`)
-            setSearchPhoto([...searchPhoto, ...response.data.results])
-            setPage(page + 1)
-            console.log(response)
-        }
-        catch (err) {
-            setError(err)
-        }
-    }
+    const searchFetch = useDebounce(async (searchInput) => {
+        collection.get(`/search/photos?page=${page}&query=${searchInput}`)
+            .then((response) => {
+                console.log(`searchFetching: ${response.data.results}`)
+                setSearchPhoto(searchPhoto.concat(response.data.results))
+                setPage(page + 1)
+            }).catch(error => {
+                setError(error)
+            })
+    }, 5)
+
 
     useEffect(() => {
         initialFetch()
+    }, [])
+    useEffect(() => {
         searchFetch()
     }, [searchInput])
 
     if (error) return `Error: ${error.message}`
     return (
         <div class="app__wrapper">
-            <Search setSearchInput={setSearchInput} />
+            <Search setSearchInput={setSearchInput} 
+            changeHanlder={changeHanlder}/>
             {/* <Loader active={loading} setLoading={setLoading}/> */}
             <InfiniteScroll
-                dataLength={photo.length}
+                dataLength={!searchInput ? photo.length : searchPhoto.length}
                 next={!searchInput ? initialFetch : searchFetch}
                 hasMore={true}
                 loader={<h4>Loading...</h4>}
@@ -83,7 +92,8 @@ const Collections = () => {
                                 setModalActive={setModalActive}
                                 photoUrl={index.urls.small}
                                 data={index}
-                                setModalData={setModalData} />
+                                setModalData={setModalData}
+                                 />
                         ))
                     ) : (
                         photo.map((index) => (

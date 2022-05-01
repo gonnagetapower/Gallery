@@ -40,3 +40,10 @@ dl,
 dd {
     margin: 0;
 }
+
+a:active,
+a:hover,
+a {
+    text-decoration: none;
+    color: rgb(0, 0, 0);
+}

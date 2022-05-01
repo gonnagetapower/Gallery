@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useCallback } from 'react'
 
 import './Search.css'
 
@@ -8,7 +8,7 @@ const Search = (props) => {
             <label>Search the photo:</label>
             <input 
             className='search__field' 
-            onChange={(e) => props.setSearchInput(e.target.value)}
+            onChange={props.changeHanlder}
             />
         </div>
     )
