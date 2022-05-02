@@ -1,27 +1,18 @@
-import React, { useEffect, useState , useCallback } from "react";
-import axios from "axios";
+import React, { useEffect, useState } from "react";
 import { Masonry } from "@mui/lab";
 import InfiniteScroll from "react-infinite-scroll-component";
 
 import Photo from './components/Photo/Photo'
 
 import "./Gallery.css"
+
 import Modal from "../../Components/Modal/Modal.jsx";
 import Search from "./components/Search/Search";
 import Loader from "../../Components/Loader/Loader";
+
 import useDebounce from "../../hooks/useDebounce";
+import API from './../../api/api.js'
 
-const collection = axios.create({
-    baseURL: "https://api.unsplash.com/",
-    params: {
-        page: 1,
-        per_page: 20,
-    },
-    headers: {
-        "Authorization": "Client-ID -yyQ7Y9Pqa3Q7woGoqzC-eh4Ktc0tp64qBDTMdx-Tdw"
-    }
-
-})
 
 
 const Collections = () => {
@@ -29,36 +20,32 @@ const Collections = () => {
     const [photo, setPhoto] = useState([])
     const [page, setPage] = useState(1)
 
-    const [modalData, setModalData] = useState({});
+    const [modalData, setModalData] = useState([]);
+    const [modalDescription , setModalDescription] = useState([])
 
     const [searchInput, setSearchInput] = useState('')
     const [searchPhoto, setSearchPhoto] = useState([])
 
-    const debouncedSearchTerm = useDebounce(searchInput, 500);
+    const debouncedSearchTerm = useDebounce(searchInput, 1500);
 
     const [loading, setLoading] = useState(false)
 
     const [error, setError] = useState(null)
 
-    const changeHanlder = useCallback(async (e) => {
-        setSearchInput(e.target.value)
-    }, [])
-
-
     function initialFetch() {
-        collection.get(`/photos?page=${page}`).
+        API.get(`/photos?page=${page}`).
             then((response) => {
                 setPhoto([...photo, ...response.data])
                 setPage(page + 1)
+                console.log(response.data)
             }).catch(error => {
                 setError(error)
             })
     }
 
-    const searchFetch = (query) => {
-        collection.get(`/search/photos?page=${page}&query=${query}`)
+    const searchFetch = () => {
+        API.get(`/search/photos?page=${page}&query=${searchInput}`)
             .then((response) => {
-                setSearchPhoto(null)
                 setSearchPhoto(searchPhoto.concat(response.data.results))
                 setPage(page + 1)
             }).catch(error => {
@@ -71,20 +58,18 @@ const Collections = () => {
         initialFetch()
     }, [])
     useEffect(() => {
-      if (debouncedSearchTerm) {
         searchFetch(debouncedSearchTerm)
-      }
     }, [debouncedSearchTerm])
 
     if (error) return `Error: ${error.message}`
     return (
         <div class="app__wrapper">
-            <Search setSearchInput={setSearchInput} 
-            changeHanlder={changeHanlder}/>
+            <Search setSearchInput={setSearchInput}
+            setSearchPhoto={setSearchPhoto} />
             {/* <Loader active={loading} setLoading={setLoading}/> */}
             <InfiniteScroll
                 dataLength={!searchInput ? photo.length : searchPhoto.length}
-                next={!searchInput ? initialFetch : searchFetch}
+                next={!debouncedSearchTerm ? initialFetch : searchFetch}
                 hasMore={true}
                 loader={<h4>Loading...</h4>}
             >
@@ -96,6 +81,7 @@ const Collections = () => {
                                 photoUrl={index.urls.small}
                                 data={index}
                                 setModalData={setModalData}
+                                setModalDescription={setModalDescription}
                                  />
                         ))
                     ) : (
@@ -104,12 +90,16 @@ const Collections = () => {
                                 setModalActive={setModalActive}
                                 photoUrl={index.urls.small}
                                 data={index}
-                                setModalData={setModalData} />
+                                setModalData={setModalData} 
+                                setModalDescription={setModalDescription}/>
                         )))}
                 </Masonry>
             </InfiniteScroll>
             <Modal active={modalActive} setActive={setModalActive} >
                 <img src={modalData} />
+                    <h1>inst <br />: {modalDescription.instagram_username ? modalDescription.instagram_username : "empty"}</h1>
+                    <h1>site <br />: {modalDescription.portfolio_url ? modalDescription.portfolio_url : "empty"}</h1>
+                    <h1>twitter <br />: {modalDescription.twitter_username ? modalDescription.twitter_username : "empty"}</h1>
             </Modal>
         </div>
     )

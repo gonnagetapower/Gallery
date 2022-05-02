@@ -8,7 +8,10 @@ const Search = (props) => {
             <label>Search the photo:</label>
             <input 
             className='search__field' 
-            onChange={e => props.setSearchInput(e.target.value)}
+            onChange={e => {
+                props.setSearchInput(e.target.value)
+                props.setSearchPhoto([])
+            }}
             />
         </div>
     )

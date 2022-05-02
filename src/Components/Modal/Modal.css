@@ -59,6 +59,11 @@
         max-width: 1200px;
     }
     
+    .modal__item>h1 {
+        max-width: 350px;
+        overflow-wrap: break-word;
+    }
+    
     @media screen and (max-width: 600px) {
         .modal__item>img {
             max-height: 400px;

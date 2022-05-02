@@ -16,10 +16,12 @@ const Header = () => {
                 </ul>
             </nav>
             <div class="header__appName">
+                <div>
                 <h1>
                     <Link to='/'>
                         Gallery App</Link>
                 </h1>
+                </div>
             </div>
         </div>
     )
