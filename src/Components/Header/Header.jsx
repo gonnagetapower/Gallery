@@ -4,8 +4,8 @@ import './Header.css'
 
 const Header = () => {
     return (
-        <div class="header">
-            <nav class="header__contacts">
+        <div className="header">
+            <nav className="header__contacts">
                 <ul>
                     <li>
                         <Link to='/me'>About Me</Link>
@@ -15,7 +15,7 @@ const Header = () => {
                     </li>
                 </ul>
             </nav>
-            <div class="header__appName">
+            <div className="header__appName">
                 <div>
                 <h1>
                     <Link to='/'>

@@ -5,7 +5,7 @@ import './Photo.css'
 const Photo = (props) => {
     return (
         <>
-            <img class="item__photo" onClick={() => {
+            <img className="item__photo"  alt='searchphoto' onClick={() => {
                 props.setModalActive(true)
                 props.setModalData(props.data.urls.regular)
                 props.setModalDescription(props.data.user.social)
