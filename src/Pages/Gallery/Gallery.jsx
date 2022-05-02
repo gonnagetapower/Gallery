@@ -21,7 +21,7 @@ const Collections = () => {
     const [page, setPage] = useState(1)
 
     const [modalData, setModalData] = useState([]);
-    const [modalDescription , setModalDescription] = useState([])
+    const [modalDescription, setModalDescription] = useState([])
 
     const [searchInput, setSearchInput] = useState('')
     const [searchPhoto, setSearchPhoto] = useState([])
@@ -65,7 +65,7 @@ const Collections = () => {
     return (
         <div class="app__wrapper">
             <Search setSearchInput={setSearchInput}
-            setSearchPhoto={setSearchPhoto} />
+                setSearchPhoto={setSearchPhoto} />
             {/* <Loader active={loading} setLoading={setLoading}/> */}
             <InfiniteScroll
                 dataLength={!searchInput ? photo.length : searchPhoto.length}
@@ -82,7 +82,8 @@ const Collections = () => {
                                 data={index}
                                 setModalData={setModalData}
                                 setModalDescription={setModalDescription}
-                                 />
+                                key={index.id}
+                            />
                         ))
                     ) : (
                         photo.map((index) => (
@@ -90,16 +91,18 @@ const Collections = () => {
                                 setModalActive={setModalActive}
                                 photoUrl={index.urls.small}
                                 data={index}
-                                setModalData={setModalData} 
-                                setModalDescription={setModalDescription}/>
+                                setModalData={setModalData}
+                                setModalDescription={setModalDescription}
+                                key={index.id}
+                            />
                         )))}
                 </Masonry>
             </InfiniteScroll>
             <Modal active={modalActive} setActive={setModalActive} >
                 <img src={modalData} />
-                    <h1>inst <br />: {modalDescription.instagram_username ? modalDescription.instagram_username : "empty"}</h1>
-                    <h1>site <br />: {modalDescription.portfolio_url ? modalDescription.portfolio_url : "empty"}</h1>
-                    <h1>twitter <br />: {modalDescription.twitter_username ? modalDescription.twitter_username : "empty"}</h1>
+                <h1>inst: {modalDescription.instagram_username ? modalDescription.instagram_username : "empty"}</h1>
+                <h1>site: {modalDescription.portfolio_url ? modalDescription.portfolio_url : "empty"}</h1>
+                <h1>twitter: {modalDescription.twitter_username ? modalDescription.twitter_username : "empty"}</h1>
             </Modal>
         </div>
     )
