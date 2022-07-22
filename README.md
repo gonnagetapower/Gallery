@@ -1,8 +1,8 @@
 # Gallery Application
 View in Netify
-```
+
 https://gallery-infinit.netlify.app/
-```
+
 ## Description
 
 Application for view and search photos from Unsplash.api.
