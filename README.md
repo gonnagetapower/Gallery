@@ -1,7 +1,7 @@
 # Gallery Application
 View in Netify
 ```
-https://mellow-daifuku-8b98e4.netlify.app/
+https://gallery-infinit.netlify.app/
 ```
 ## Description
 
